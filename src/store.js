@@ -33,6 +33,5 @@ const store = createStore(
   enhancer
 )
 
-window.store = store
 
 export default store
