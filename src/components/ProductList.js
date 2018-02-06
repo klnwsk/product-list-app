@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 
 class ProductList extends React.Component {
@@ -10,10 +11,18 @@ class ProductList extends React.Component {
   render() {
     return (
       <div>
-        Hello
+        <h2>Products list:</h2>
         <ul>
           {this.props.products.map(
-            item => <li onClick={this.handleClick}> {item.name} </li>
+            item =>
+              <li
+                onClick={this.handleClick}
+                data-item-id={item.name}
+              >
+                <Link to={`/details`}>
+                {item.name}
+                </Link>
+              </li>
           )}
         </ul>
       </div>
