@@ -1,61 +1,143 @@
-const BEGIN = 'GET_BEGIN'
+const GET_BEGIN = 'GET_BEGIN'
+const GET_SUCCESS = 'GET_SUCCESS'
+const GET_FAIL = 'GET_FAIL'
+
+const GET_DETAILS_BEGIN = 'GET_DETAILS_BEGIN'
+const GET_DETAILS_SUCCESS = 'GET_DETAILS_SUCCESS'
+const GET_DETAILS_FAIL = 'GET_DETAILS_FAIL'
+
+const PUT_DETAILS_BEGIN = 'PUT_DETAILS_BEGIN'
+const PUT_DETAILS_SUCCESS = 'PUT_DETAILS_SUCCESS'
+const PUT_DETAILS_FAIL = 'PUT_DETAILS_FAIL'
+
+const SET_INDEX = 'SET_INDEX_BEGIN'
 
 const initialState = {
-  data: [
-    {
-      name: "b0006se5bq",
-      number: "singing coach unlimited",
-      description: `singing coach unlimited - electronic learning
-      products (win me nt 2000 xp)`,
-  images: [
-  {
-    url: "http://lorempixel.com/200/200/technics/",
-    name: "singing coach"
-  },
-  {
-    url: `http://lorempixel.com/200/200/abstract/`,
-    name: "front side"
-  }
-]
-},
-{
-  name: "b00021xhzw",
-  number: `adobe after effects professional 6.5 upgrade from
-  standard to professional`,
-  description: `upgrade only; installation of after effects
-  standard new disk caching tools speed up your interactive work
-  save any combination of animation parameters as presets`,
-  images: []
-},
-{
-  name: "b00021xhzw",
-  number: "domino designer/developer v5.0",
-  description: `reference domino designer/developer r5 doc
-  pack includes the following titles: application development with
-  domino designer (intermediate-advanced) 536 pages it explains
-  building applications creating databases using forms fields views
-  folders navi`,
-  images: [
-  {
-    url: "http://lorempixel.com/200/200/people/",
-    name: "cover"
-  }
-]
-}
-]
-
+  data: [],
+  index: null,
+  getting: false,
+  adding: false,
+  details: []
 }
 
-export const getProducts = () => ({
-  type: BEGIN,
+export const getProducts = () => dispatch => {
+  dispatch({type: GET_BEGIN})
+  fetch(
+    `https://product-list.getsandbox.com/products`
+  ).then(
+    response => response.json()
+  ).then(
+    data => dispatch({type: GET_SUCCESS, data: data})
+  ).catch(
+    error => dispatch({ type: GET_FAIL, error})
+  )
+}
+
+export const getDetails = (index) => dispatch => {
+  dispatch({type: GET_DETAILS_BEGIN})
+  fetch(
+    `https://product-list.getsandbox.com/products/${index}`
+  ).then(
+    response => response.json()
+  ).then(
+    data => dispatch({type: GET_DETAILS_SUCCESS, details: data})
+  ).catch (
+    error => dispatch({ type: GET_DETAILS_FAIL, error})
+  )
+}
+
+export const updateProduct = (productName, productNumber, productDescription, index) => dispatch => {
+  dispatch({type: PUT_DETAILS_BEGIN})
+  fetch(
+    `https://product-list.getsandbox.com/products/${index}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: productName,
+        number: productNumber,
+        description: productDescription
+      })
+
+    }
+  ).then(
+    response => response.json()
+  ).then(
+    data => {
+      dispatch({ type: PUT_DETAILS_SUCCESS, data })
+      dispatch(getDetails(index))
+    }
+  ).catch(
+    error => dispatch({ type: PUT_DETAILS_FAIL, error })
+  )
+}
+
+
+
+export const setIndex = index => ({
+  type: SET_INDEX, currentIndex: index
 })
 
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
-    case BEGIN:
+    case GET_BEGIN:
       return {
-        ...state
+        ...state,
+        getting: true,
+        error: null
+      }
+    case GET_SUCCESS:
+      return {
+        ...state,
+        getting: false,
+        data: action.data
+      }
+    case GET_FAIL:
+      return {
+        ...state,
+        getting: false,
+        error: action.error
+      }
+    case GET_DETAILS_BEGIN:
+      return {
+        ...state,
+        getting: true,
+        error: null
+      }
+    case GET_DETAILS_SUCCESS:
+      return {
+        ...state,
+        getting: false,
+        details: action.details
+      }
+    case GET_DETAILS_FAIL:
+      return {
+        ...state,
+        getting: false,
+        error: action.error
+      }
+    case PUT_DETAILS_BEGIN:
+      return {
+        ...state,
+        adding: true,
+      }
+    case PUT_DETAILS_SUCCESS:
+      return {
+        ...state,
+        adding: false
+      }
+    case PUT_DETAILS_FAIL:
+      return {
+        ...state,
+        adding: false,
+        error: action.error
+      }
+    case SET_INDEX:
+      return {
+        ...state,
+        index: action.currentIndex
       }
     default:
       return state
