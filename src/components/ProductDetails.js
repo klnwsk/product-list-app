@@ -1,8 +1,8 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
-import { Form, FormGroup, Input, Label, Button } from 'reactstrap'
-import { getDetails, updateProduct } from "../state/productList"
+import React from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { Form, FormGroup, Input, Label, Button } from 'reactstrap';
+import { getProduct, updateProduct } from '../state/productList';
 
 
 class ProductDetails extends React.Component {
@@ -18,20 +18,28 @@ class ProductDetails extends React.Component {
   }
 
   handleSubmit = event => {
-
     event.preventDefault()
 
-    const productName = this.state.name === '' ? this.props.details.name : this.state.name
-    const productNumber = this.state.number === '' ? this.props.details.number : this.state.number
-    const productDescription = this.state.description === '' ? this.props.details.description : this.state.description
+    const name = this.state.name || this.props.details.name
+    const number = this.state.number || this.props.details.number
+    const description = this.state.description || this.props.details.description
     const index = this.props.match.params.id
 
     this.toggleEditMode()
-    this.props.updateProduct(productName, productNumber, productDescription, index)
+    this.props.updateProduct(name, number, description, index)
+    this.setStateDefault()
+  }
+
+  setStateDefault = () => {
+    this.setState({
+      name: '',
+      number: '',
+      description: '',
+      changed: false
+    })
   }
 
   handleChange = event => {
-
     this.setState({
       [event.target.id]: event.target.value,
       changed: true
@@ -39,7 +47,6 @@ class ProductDetails extends React.Component {
   }
 
   handleCancel = () => {
-
     this.setState({
       readMode: true,
       changed: false,
@@ -62,16 +69,15 @@ class ProductDetails extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getDetails(this.props.match.params.id)
+    this.props.getProduct(this.props.match.params.id)
   }
-
 
   render() {
 
-    const productImages = this.props.details.images === undefined ? this.state.images : this.props.details.images
-    const productName = this.state.changed ? (this.state.name === '' ? this.props.details.name : this.state.name) : this.props.details.name
-    const productNumber = this.state.changed ? (this.state.number === '' ? this.props.details.number : this.state.number) : this.props.details.number
-    const productDetails = this.state.changed ? (this.state.description === '' ? this.props.details.description : this.state.description) : this.props.details.description
+    const images = this.props.details.images || this.state.images
+    const name = this.state.changed && this.state.name ? this.state.name : this.props.details.name
+    const number = this.state.changed && this.state.number ? this.state.number : this.props.details.number
+    const description = this.state.changed && this.state.description ? this.state.description : this.props.details.description
 
     return (
       <div>
@@ -91,8 +97,8 @@ class ProductDetails extends React.Component {
             <Input
               type="text"
               readOnly={this.state.readMode}
-              value={productName}
-              style={{border: '0px', width: '100%', backgroundColor: 'none'}}
+              value={name}
+              style={{border: '0px', width: '100%'}}
               id="name"
               onChange={this.handleChange}
             />
@@ -104,7 +110,7 @@ class ProductDetails extends React.Component {
             <Input
               type="text"
               readOnly={this.state.readMode}
-              value={productNumber}
+              value={number}
               style={{border: '0px', width: '100%'}}
               id="number"
               onChange={this.handleChange}
@@ -117,7 +123,7 @@ class ProductDetails extends React.Component {
             <Input
               type="textarea"
               readOnly={this.state.readMode}
-              value={productDetails}
+              value={description}
               style={{border: '0px', width: '100%'}}
               id="description"
               onChange={this.handleChange}
@@ -145,17 +151,17 @@ class ProductDetails extends React.Component {
           }
         </Form>
         {
-          productImages.length > 0 ?
-            productImages.map(
-              (ele, ind) =>
+          images.length > 0 ?
+            images.map(
+              (img, idx) =>
                 <a
-                  key={ind}
+                  key={idx}
                   href="https://bluestonepim.com"
                 >
                   <img
                     onLoad={this.handleImageLoad}
-                    src={`${ele.url}`}
-                    alt="Example pic"
+                    src={`${img.url}`}
+                    alt="Product"
                   />
                   {
                     this.state.imgLoading && <p>Getting images...</p>
@@ -176,8 +182,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  getDetails: (index) => dispatch(getDetails(index)),
-  updateProduct: (productName, productNumber, productDescription, index) => dispatch(updateProduct(productName, productNumber, productDescription, index))
+  getProduct: (index) => dispatch(getProduct(index)),
+  updateProduct: (name, number, description, index) => dispatch(updateProduct(name, number, description, index))
 })
 
 export default connect(
