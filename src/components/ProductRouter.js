@@ -3,13 +3,16 @@ import { connect } from 'react-redux';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import ProductList from './ProductList';
 import ProductDetails from './ProductDetails';
+import './ProductRouter.css'
 
 class ProductRouter extends React.Component {
 
   render() {
     return(
       <Router>
-        <div>
+        <div
+          className="router-wrapper container"
+        >
           <Route exact path='/' component={ProductList}/>
           <Route path={`/details/:id`} component={ProductDetails}/>
         </div>

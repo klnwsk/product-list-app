@@ -1,0 +1,37 @@
+.section-wrapper {
+    position: relative;
+}
+
+.section-header {
+    font-weight: 700;
+    margin-top: 15px;
+    margin-bottom: 35px;
+}
+
+.section-header:after {
+    position: absolute;
+    content: '';
+    width: 55px;
+    bottom: 145px;
+    height: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #112349;
+}
+
+.section-list {
+    list-style: none;
+}
+
+.section-list-item {
+    padding-bottom: 15px;
+}
+
+.section-list-item > a {
+    color: #343434;
+}
+
+.section-list-item > a:visited {
+    color: #343434;
+}
+

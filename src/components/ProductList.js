@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getProducts, setIndex } from "../state/productList";
+import './ProductList.css'
 
 
 class ProductList extends React.Component {
@@ -21,8 +22,8 @@ class ProductList extends React.Component {
 
   render() {
     return (
-      <div>
-        <h2>Products:</h2>
+      <div className="section-wrapper">
+        <h2 className="section-header">Products</h2>
 
         {
           this.props.status.getting && <p>Getting products...</p>
@@ -32,13 +33,16 @@ class ProductList extends React.Component {
           this.props.status.error && <p>Woops! Something went wrong :(</p>
         }
 
-        <ul>
+        <ul
+          className="section-list"
+        >
           {this.props.products.map(
             (item, ind) =>
               <li
                 onClick={this.handleClick}
                 data-item-id={ind}
                 key={ind}
+                className="section-list-item"
               >
                 <Link to={`/details/${ind}`}>
                   {item.number}

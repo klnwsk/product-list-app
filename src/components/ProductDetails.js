@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Form, FormGroup, Input, Label, Button } from 'reactstrap';
 import { getProduct, updateProduct } from '../state/productList';
+import './ProductDetails.css'
 
 
 class ProductDetails extends React.Component {
@@ -81,7 +82,7 @@ class ProductDetails extends React.Component {
 
     return (
       <div>
-        <Button>
+        <Button className="cta-button">
           <Link to='/'>
             BACK
           </Link>
@@ -89,16 +90,17 @@ class ProductDetails extends React.Component {
         <Form
           onSubmit={this.handleSubmit}
           id="form"
+          className="section-form"
         >
           <FormGroup>
             <Label for="name">
               Name:
             </Label>
             <Input
+              className="form-input"
               type="text"
               readOnly={this.state.readMode}
               value={name}
-              style={{border: '0px', width: '100%'}}
               id="name"
               onChange={this.handleChange}
             />
@@ -108,10 +110,11 @@ class ProductDetails extends React.Component {
               Number:
             </Label>
             <Input
+              className="form-input"
+
               type="text"
               readOnly={this.state.readMode}
               value={number}
-              style={{border: '0px', width: '100%'}}
               id="number"
               onChange={this.handleChange}
             />
@@ -121,10 +124,11 @@ class ProductDetails extends React.Component {
               Description:
             </Label>
             <Input
+              className="form-input"
+
               type="textarea"
               readOnly={this.state.readMode}
               value={description}
-              style={{border: '0px', width: '100%'}}
               id="description"
               onChange={this.handleChange}
             />
@@ -133,17 +137,20 @@ class ProductDetails extends React.Component {
             this.state.readMode ?
               <Button
                 onClick={this.toggleEditMode}
+                className="cta-button"
               >
                 Update
               </Button> :
               <div>
                 <Button
                   type='submit'
+                  className="cta-button cta-button-secondary"
                 >
                   Save
                 </Button>
                 < Button
                   onClick={this.handleCancel}
+                  className="cta-button cta-button-secondary"
                 >
                   Cancel
                 </Button>

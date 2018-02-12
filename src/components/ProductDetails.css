@@ -1,0 +1,28 @@
+.form-input {
+    text-align: center;
+    border: 0px;
+}
+
+.section-form {
+    text-align: center;
+}
+
+.cta-button {
+    border: 1px solid black;
+    background: transparent !important;
+    transition: all 300ms;
+    margin: 15px auto 15px;
+    color: #343434 !important;
+}
+.cta-button > a:visited {
+    color: #343434;
+}
+
+.cta-button:hover {
+    background-color: aliceblue !important;
+    color: #343434;
+}
+
+.cta-button-secondary{
+    margin-left: 15px;
+}
